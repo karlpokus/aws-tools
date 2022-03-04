@@ -11,7 +11,7 @@ $ ./fuzzy.sh -h [| peco]
 
 # todos
 - [x] use LOG_GROUP cache
-- [ ] update cache
+- [x] update cache
 - [ ] check commands
 - [ ] fetch multiple groups?
 - [ ] check expired sso session
