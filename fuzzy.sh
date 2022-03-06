@@ -2,8 +2,8 @@
 
 # defaults
 OPT_SINCE=5m
-OPT_FOLLOW=
-OPT_UPDATE_CACHE=
+OPT_FOLLOW=n
+OPT_UPDATE_CACHE=n
 
 stderr() {
   echo "$@" 1>&2
@@ -55,7 +55,7 @@ shift $((OPTIND-1))
 
 # fuzzy search profile
 AWS_PROFILE=$(grep '\[profile' ~/.aws/config | tr -d [] | cut -d " " -f 2 | peco)
-stderr "* using aws profile ${AWS_PROFILE}"
+stderr "* using profile ${AWS_PROFILE}"
 
 # log_group cache
 mkdir -p log_group
@@ -68,11 +68,13 @@ fi
 
 # fuzzy search log group
 LOG_GROUP=$(peco ${LOG_GROUP_FILE})
-stderr "* pulling logs from ${LOG_GROUP} since ${OPT_SINCE} ago"
+stderr "* pulling ${LOG_GROUP}"
+stderr "  since ${OPT_SINCE} ago"
 
 TAIL_ARGS="--since $OPT_SINCE --format short"
 if [ "${OPT_FOLLOW}" == "y" ]; then
   TAIL_ARGS="${TAIL_ARGS} --follow"
+  stderr "  following"
 fi
 
 # note: this works nicely to fail gracefully if sso session expired
