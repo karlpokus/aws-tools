@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # defaults
 OPT_SINCE=5m
 OPT_FOLLOW=n

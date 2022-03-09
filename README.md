@@ -15,8 +15,10 @@ $ ./fuzzy.sh -h [| peco]
 - [ ] check commands
 - [ ] fetch multiple groups?
 - [ ] check expired sso session
-- [ ] add logs if follow is set
+- [x] add logs if follow is set
 - [ ] is there a kinder signal to stop following? SIGINT produces a BrokenPipeError
+- [ ] tee logs to disk by default. Add flag to disable
+- [x] set pipefail
 
 # license
 MIT
