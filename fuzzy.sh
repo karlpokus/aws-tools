@@ -61,16 +61,17 @@ stderr "* using profile ${AWS_PROFILE}"
 
 # log_group cache
 mkdir -p log_group
-LOG_GROUP_FILE="log_group/${AWS_PROFILE}"
-if [ ! -f "${LOG_GROUP_FILE}" ] || [ "${OPT_UPDATE_CACHE}" == "y" ]; then
+LOG_GROUP_NAMES_FILE="log_group/${AWS_PROFILE}"
+if [ ! -f "${LOG_GROUP_NAMES_FILE}" ] || [ "${OPT_UPDATE_CACHE}" == "y" ]; then
   stderr "* creating cache"
-  create_cache "${LOG_GROUP_FILE}"
+  create_cache "${LOG_GROUP_NAMES_FILE}"
   stderr "* cache created"
 fi
 
 # fuzzy search log group
-LOG_GROUP=$(peco ${LOG_GROUP_FILE})
-stderr "* pulling ${LOG_GROUP}"
+LOG_GROUP_NAME_FULL=$(peco ${LOG_GROUP_NAMES_FILE})
+LOG_GROUP_NAME=$(sed 's;/aws/lambda/;;' <<<${LOG_GROUP_NAME_FULL})
+stderr "* pulling ${LOG_GROUP_NAME}"
 stderr "  since ${OPT_SINCE} ago"
 
 TAIL_ARGS="--since $OPT_SINCE --format short"
@@ -79,5 +80,8 @@ if [ "${OPT_FOLLOW}" == "y" ]; then
   stderr "  following"
 fi
 
-# note: this works nicely to fail gracefully if sso session expired
-aws --profile "${AWS_PROFILE}" logs tail "${LOG_GROUP}" ${TAIL_ARGS}
+# backup log file
+mkdir -p bak
+BAK_LOG_FILE="bak/${LOG_GROUP_NAME}_$(date --iso-8601=seconds)_${OPT_SINCE}.log"
+
+aws --profile "${AWS_PROFILE}" logs tail "${LOG_GROUP_NAME_FULL}" ${TAIL_ARGS} | tee "${BAK_LOG_FILE}"

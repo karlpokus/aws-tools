@@ -17,7 +17,8 @@ $ ./fuzzy.sh -h [| peco]
 - [ ] check expired sso session
 - [x] add logs if follow is set
 - [ ] is there a kinder signal to stop following? SIGINT produces a BrokenPipeError
-- [ ] tee logs to disk by default. Add flag to disable
+- [x] tee logs to disk by default
+- [ ] disable backup logs flag
 - [x] set pipefail
 
 # license
