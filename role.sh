@@ -7,7 +7,7 @@
 AWS_PROFILE=$1
 
 if test -z "${AWS_PROFILE}"; then
-  echo "error: missing arg"
+  echo "error: missing arg AWS_PROFILE"
   exit 1
 fi
 
@@ -46,12 +46,12 @@ INLINE_POLICIES=$(aws --profile "${AWS_PROFILE}" iam list-role-policies \
 
 INLINE_POLICIES_LENGTH=$(jq '.PolicyNames | length' <<<"${INLINE_POLICIES}")
 
-echo "* Inline Policies count: ${INLINE_POLICIES_LENGTH}"
+echo "* Inline Policies: ${INLINE_POLICIES_LENGTH}"
 
 if test "${INLINE_POLICIES_LENGTH}" -gt 0; then
   # assume only one inline policy
   INLINE_POLICY_NAME=$(jq -r '.PolicyNames[0]' <<<"${INLINE_POLICIES}")
-  echo "* Inline Policy name: ${INLINE_POLICY_NAME}"
+  echo "  policy name: ${INLINE_POLICY_NAME}"
   aws --profile "${AWS_PROFILE}" iam get-role-policy \
     --role-name "${ROLE}" \
     --policy-name "${INLINE_POLICY_NAME}" \
@@ -65,14 +65,14 @@ ATTACHED_POLICIES=$(aws --profile "${AWS_PROFILE}" iam list-attached-role-polici
 
 ATTACHED_POLICIES_LENGTH=$(jq '.AttachedPolicies | length' <<<"${ATTACHED_POLICIES}")
 
-echo "* Attached Policies count: ${ATTACHED_POLICIES_LENGTH}"
+echo "* Attached Policies: ${ATTACHED_POLICIES_LENGTH}"
 
 test "${ATTACHED_POLICIES_LENGTH}" -eq 0 && exit 0
 
 # assume only one attached policy
 ATTACHED_POLICY_ARN=$(jq -r '.AttachedPolicies[].PolicyArn' <<<"${ATTACHED_POLICIES}")
 
-echo "* Attached Policy arn: ${ATTACHED_POLICY_ARN}"
+echo "  policy arn: ${ATTACHED_POLICY_ARN}"
 
 VERSION=$(aws --profile "${AWS_PROFILE}" iam get-policy \
   --policy-arn "${ATTACHED_POLICY_ARN}" \
