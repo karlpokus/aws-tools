@@ -35,8 +35,8 @@ test -z "${ROLE_DATA}" && exit 0
 ASSUME_POLICY=$(jq -C '.Role.AssumeRolePolicyDocument.Statement' <<<"${ROLE_DATA}")
 LAST_USED=$(jq -r '.Role.RoleLastUsed.LastUsedDate' <<<"${ROLE_DATA}")
 
-echo "* AssumeRolePolicyDocument"
 echo "  last used: ${LAST_USED}"
+echo "  AssumeRolePolicyDocument:"
 echo "${ASSUME_POLICY}"
 
 # try pulling inline policies
