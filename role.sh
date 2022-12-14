@@ -49,13 +49,13 @@ INLINE_POLICIES_LENGTH=$(jq '.PolicyNames | length' <<<"${INLINE_POLICIES}")
 echo "* Inline Policies: ${INLINE_POLICIES_LENGTH}"
 
 if test "${INLINE_POLICIES_LENGTH}" -gt 0; then
-  # assume only one inline policy
-  INLINE_POLICY_NAME=$(jq -r '.PolicyNames[0]' <<<"${INLINE_POLICIES}")
-  echo "  policy name: ${INLINE_POLICY_NAME}"
-  aws --profile "${AWS_PROFILE}" iam get-role-policy \
-    --role-name "${ROLE}" \
-    --policy-name "${INLINE_POLICY_NAME}" \
-    | jq '.PolicyDocument.Statement'
+  for inline_policy_name in $(jq -r '.PolicyNames[]' <<<"${INLINE_POLICIES}"); do
+    echo "  policy name: ${inline_policy_name}"
+    aws --profile "${AWS_PROFILE}" iam get-role-policy \
+      --role-name "${ROLE}" \
+      --policy-name "${inline_policy_name}" \
+      | jq '.PolicyDocument.Statement'
+  done
 fi
 
 # try pulling attached policies
@@ -69,16 +69,13 @@ echo "* Attached Policies: ${ATTACHED_POLICIES_LENGTH}"
 
 test "${ATTACHED_POLICIES_LENGTH}" -eq 0 && exit 0
 
-# assume only one attached policy
-ATTACHED_POLICY_ARN=$(jq -r '.AttachedPolicies[].PolicyArn' <<<"${ATTACHED_POLICIES}")
-
-echo "  policy arn: ${ATTACHED_POLICY_ARN}"
-
-VERSION=$(aws --profile "${AWS_PROFILE}" iam get-policy \
-  --policy-arn "${ATTACHED_POLICY_ARN}" \
-  | jq -r .Policy.DefaultVersionId)
-
-aws --profile "${AWS_PROFILE}" iam get-policy-version \
-  --policy-arn "${ATTACHED_POLICY_ARN}" \
-  --version-id "${VERSION}" \
-  | jq '.PolicyVersion.Document.Statement'
+for attached_policy_arn in $(jq -r '.AttachedPolicies[].PolicyArn' <<<"${ATTACHED_POLICIES}"); do
+  echo "  policy arn: ${attached_policy_arn}"
+  version=$(aws --profile "${AWS_PROFILE}" iam get-policy \
+    --policy-arn "${attached_policy_arn}" \
+    | jq -r .Policy.DefaultVersionId)
+  aws --profile "${AWS_PROFILE}" iam get-policy-version \
+    --policy-arn "${attached_policy_arn}" \
+    --version-id "${version}" \
+    | jq '.PolicyVersion.Document.Statement'
+done
