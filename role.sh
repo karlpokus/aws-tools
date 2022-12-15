@@ -11,12 +11,14 @@ if test -z "${AWS_PROFILE}"; then
   exit 1
 fi
 
+source ./utils.sh
+
+CACHE_PATH="cache/role/${AWS_PROFILE}"
+role_cache "${CACHE_PATH}"
+
 # fuzzy search the role with peco
 
-ROLE=$(aws --profile "${AWS_PROFILE}" iam list-roles \
-  --max-items 500 \
-  | jq -r '.Roles[].RoleName' \
-  | peco)
+ROLE=$(peco "${CACHE_PATH}")
 
 test -z "${ROLE}" && exit 0
 
