@@ -3,6 +3,8 @@
 # Show ALL permissions for a particular aws iam role
 # including inline and/or attached policies
 
+set -euo pipefail
+
 # fuzzy search aws_profile
 
 AWS_PROFILE=$(grep '\[profile' ~/.aws/config \
