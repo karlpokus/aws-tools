@@ -9,10 +9,15 @@ Some missing features from the aws cli like pulling all permissions from a role 
 # tools
 ````bash
 # stream lambda logs
-$ ./logs.sh -h [| peco]
+$ ./logs.sh
+$ ./logs.sh | peco
+$ ./logs.sh | grep <detail>
 # pull all permissions for a role
-$ ./role.sh <aws_profile>
+$ ./role.sh
 ````
+
+# cache
+Each script will create a local cache (role names, log_groups etc) for future lookups. To bust the cache - simply remove the file `cache/$type/$aws_profile` and it will be re-created on next run.
 
 # todos
 - [x] use LOG_GROUP cache
@@ -26,7 +31,6 @@ $ ./role.sh <aws_profile>
 - [ ] disable backup logs flag
 - [x] set pipefail
 - [ ] maybe add a $AWS_PROFILE dir in bak?
-- [ ] move LOG_GROUP cache to separate script
 
 # license
 MIT
