@@ -14,8 +14,6 @@ AWS_PROFILE=$(grep '\[profile' ~/.aws/config \
 
 test -z "${AWS_PROFILE}" && exit 0
 
-source ./utils.sh
-
 echo "* Profile"
 echo "  ${AWS_PROFILE}"
 
@@ -23,6 +21,7 @@ echo "* Role"
 
 # cache
 
+source ./utils.sh
 CACHE_PATH="cache/role/${AWS_PROFILE}"
 role_cache "${CACHE_PATH}"
 
