@@ -8,13 +8,11 @@ role_cache() {
   local cache_path=$1
   local cache_dir=$(dirname "${cache_path}")
   mkdir -p "${cache_dir}"
-  stderr "* Cache"
   if test ! -f "${cache_path}"; then
-    stderr "  miss"
+    stderr "  cache: miss"
     create_role_cache "${cache_path}"
-    stderr "  created"
   else
-    stderr "  hit"
+    stderr "  cache: hit"
   fi
 }
 

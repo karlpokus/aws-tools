@@ -17,6 +17,8 @@ source ./utils.sh
 stderr "* Profile"
 stderr "  ${AWS_PROFILE}"
 
+stderr "* Role"
+
 # cache
 
 CACHE_PATH="cache/role/${AWS_PROFILE}"
@@ -28,8 +30,7 @@ ROLE=$(peco "${CACHE_PATH}")
 
 test -z "${ROLE}" && exit 0
 
-echo "* Role"
-echo "  ${ROLE}"
+echo "  name: ${ROLE}"
 
 # pull role data
 
