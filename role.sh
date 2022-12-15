@@ -16,10 +16,10 @@ test -z "${AWS_PROFILE}" && exit 0
 
 source ./utils.sh
 
-stderr "* Profile"
-stderr "  ${AWS_PROFILE}"
+echo "* Profile"
+echo "  ${AWS_PROFILE}"
 
-stderr "* Role"
+echo "* Role"
 
 # cache
 
