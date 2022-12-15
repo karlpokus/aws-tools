@@ -1,22 +1,23 @@
 #!/bin/bash
 
-# Show all permissions for an aws iam role
-# including inline and/or attached
+# Show ALL permissions for a particular aws iam role
+# including inline and/or attached policies
 
-#AWS_PROFILE=$(grep '\[profile' ~/.aws/config | tr -d [] | cut -d " " -f 2 | peco)
-AWS_PROFILE=$1
+# fuzzy search aws_profile
 
-if test -z "${AWS_PROFILE}"; then
-  echo "error: missing arg AWS_PROFILE"
-  exit 1
-fi
+AWS_PROFILE=$(grep '\[profile' ~/.aws/config \
+  | tr -d [] \
+  | cut -d " " -f 2 \
+  | peco)
+
+test -z "${AWS_PROFILE}" && exit 0
 
 source ./utils.sh
 
 CACHE_PATH="cache/role/${AWS_PROFILE}"
 role_cache "${CACHE_PATH}"
 
-# fuzzy search the role with peco
+# fuzzy search role
 
 ROLE=$(peco "${CACHE_PATH}")
 
