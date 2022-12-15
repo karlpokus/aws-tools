@@ -14,6 +14,11 @@ test -z "${AWS_PROFILE}" && exit 0
 
 source ./utils.sh
 
+stderr "* Profile"
+stderr "  ${AWS_PROFILE}"
+
+# cache
+
 CACHE_PATH="cache/role/${AWS_PROFILE}"
 role_cache "${CACHE_PATH}"
 
