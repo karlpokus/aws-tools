@@ -12,25 +12,22 @@ Some missing features from the aws cli like pulling all permissions from a role 
 $ ./logs.sh
 $ ./logs.sh | peco
 $ ./logs.sh | grep <detail>
+$ ./logs.sh | tee <file>
 # pull all permissions for a role
 $ ./role.sh
+# pull all data for an iot core thing
+$ ./thing.sh <thing>
 ````
 
 # cache
 Each script will create a local cache (role names, log_groups etc) for future lookups. To bust the cache - simply remove the file `cache/$type/$aws_profile` and it will be re-created on next run.
 
 # todos
-- [x] use LOG_GROUP cache
-- [x] update cache
-- [ ] check commands
-- [ ] fetch multiple groups?
-- [ ] check expired sso session
-- [x] add logs if follow is set
-- [ ] is there a kinder signal to stop following? SIGINT produces a BrokenPipeError
-- [ ] tee logs to disk by default
-- [ ] disable backup logs flag
+- [x] cache
 - [x] set pipefail
-- [ ] maybe add a $AWS_PROFILE dir in bak?
+- [x] role
+- [x] logs
+- [x] thing
 
 # license
 MIT
