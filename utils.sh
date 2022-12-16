@@ -36,3 +36,10 @@ logs_cache() {
     echo "  cache: hit"
   fi
 }
+
+fuzzy_profile() {
+  AWS_PROFILE=$(grep '\[profile' ~/.aws/config \
+    | tr -d [] \
+    | cut -d " " -f 2 \
+    | peco)
+}

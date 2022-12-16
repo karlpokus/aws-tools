@@ -5,16 +5,13 @@
 
 set -euo pipefail
 
+AWS_PROFILE=
+
 # fuzzy search aws_profile
 
-AWS_PROFILE=$(grep '\[profile' ~/.aws/config \
-  | tr -d [] \
-  | cut -d " " -f 2 \
-  | peco)
-
-test -z "${AWS_PROFILE}" && exit 0
-
 source ./utils.sh
+fuzzy_profile
+test -z "${AWS_PROFILE}" && exit 0
 
 stderr "* Profile"
 stderr "  ${AWS_PROFILE}"
