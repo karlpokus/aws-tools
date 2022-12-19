@@ -28,6 +28,7 @@ Each script will create a local cache (role names, log_groups etc) for future lo
 - [x] role
 - [x] logs
 - [x] thing
+- [ ] role: lambda resource-based policy
 
 # license
 MIT
