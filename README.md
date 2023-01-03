@@ -17,6 +17,8 @@ $ ./logs.sh | tee <file>
 $ ./role.sh
 # pull all data for an iot core thing
 $ ./thing.sh <thing>
+# start, stop, restart or reboot an ec2 instance
+$ ./ec2.sh
 ````
 
 # cache
@@ -28,8 +30,9 @@ Each script will create a local cache (role names, log_groups etc) for future lo
 - [x] role
 - [x] logs
 - [x] thing
+- [x] ec2
 - [ ] role: lambda resource-based policy
-- [ ] logs: ignore log_group prefix for lookup 
+- [ ] logs: ignore log_group prefix for lookup
 
 # license
 MIT
