@@ -19,6 +19,8 @@ $ ./role.sh
 $ ./thing.sh <thing>
 # start, stop, restart or reboot an ec2 instance
 $ ./ec2.sh
+# pull iot core thing shadow
+$ ./shadow.sh <thing> <shadow_name | leave empty for classic>
 ````
 
 # cache
