@@ -7,19 +7,19 @@ set -euo pipefail
 
 AWS_PROFILE=
 
+source ./utils.sh
+
 # fuzzy search aws_profile
 
-source ./utils.sh
 fuzzy_profile
 test -z "${AWS_PROFILE}" && exit 0
 
-echo "* Profile"
-echo "  ${AWS_PROFILE}"
-echo "* Role"
+header Profile
+body $AWS_PROFILE
+header Role
 
 # cache
 
-source ./utils.sh
 CACHE_PATH="cache/role/${AWS_PROFILE}"
 role_cache "${CACHE_PATH}"
 
@@ -29,7 +29,7 @@ ROLE=$(peco "${CACHE_PATH}")
 
 test -z "${ROLE}" && exit 0
 
-echo "  name: ${ROLE}"
+body $ROLE
 
 # pull role data
 
@@ -43,8 +43,8 @@ test -z "${ROLE_DATA}" && exit 0
 ASSUME_POLICY=$(jq -C '.Role.AssumeRolePolicyDocument.Statement' <<<"${ROLE_DATA}")
 LAST_USED=$(jq -r '.Role.RoleLastUsed.LastUsedDate' <<<"${ROLE_DATA}")
 
-echo "  last used: ${LAST_USED}"
-echo "  AssumeRolePolicyDocument:"
+body "last used: ${LAST_USED}"
+body "AssumeRolePolicyDocument:"
 echo "${ASSUME_POLICY}"
 
 # try pulling inline policies
@@ -54,7 +54,7 @@ INLINE_POLICIES=$(aws --profile "${AWS_PROFILE}" iam list-role-policies \
 
 INLINE_POLICIES_LENGTH=$(jq '.PolicyNames | length' <<<"${INLINE_POLICIES}")
 
-echo "* Inline Policies: ${INLINE_POLICIES_LENGTH}"
+header "Inline Policies: ${INLINE_POLICIES_LENGTH}"
 
 if test "${INLINE_POLICIES_LENGTH}" -gt 0; then
   for inline_policy_name in $(jq -r '.PolicyNames[]' <<<"${INLINE_POLICIES}"); do
@@ -73,12 +73,12 @@ ATTACHED_POLICIES=$(aws --profile "${AWS_PROFILE}" iam list-attached-role-polici
 
 ATTACHED_POLICIES_LENGTH=$(jq '.AttachedPolicies | length' <<<"${ATTACHED_POLICIES}")
 
-echo "* Attached Policies: ${ATTACHED_POLICIES_LENGTH}"
+header "Attached Policies: ${ATTACHED_POLICIES_LENGTH}"
 
 test "${ATTACHED_POLICIES_LENGTH}" -eq 0 && exit 0
 
 for attached_policy_arn in $(jq -r '.AttachedPolicies[].PolicyArn' <<<"${ATTACHED_POLICIES}"); do
-  echo "  policy arn: ${attached_policy_arn}"
+  body "  policy arn: ${attached_policy_arn}"
   version=$(aws --profile "${AWS_PROFILE}" iam get-policy \
     --policy-arn "${attached_policy_arn}" \
     | jq -r .Policy.DefaultVersionId)
