@@ -14,12 +14,12 @@ role_cache() {
   local cache_dir=$(dirname "${cache_path}")
   mkdir -p "${cache_dir}"
   if test ! -f "${cache_path}"; then
-    echo "  cache: miss"
+    echo "cache: miss"
     aws --profile "${AWS_PROFILE}" iam list-roles \
-      --max-items 500 \
+      --max-items 1000 \
       | jq -r '.Roles[].RoleName' > "${cache_path}"
   else
-    echo "  cache: hit"
+    echo "cache: hit"
   fi
 }
 
@@ -28,12 +28,12 @@ logs_cache() {
   local cache_dir=$(dirname "${cache_path}")
   mkdir -p "${cache_dir}"
   if test ! -f "${cache_path}"; then
-    echo "  cache: miss"
+    echo "cache: miss"
     aws --profile "${AWS_PROFILE}" logs describe-log-groups \
       --log-group-name-prefix /aws/lambda --max-items 500 \
       | jq -r '.logGroups[].logGroupName' > "${cache_path}"
   else
-    echo "  cache: hit"
+    echo "cache: hit"
   fi
 }
 
@@ -75,4 +75,15 @@ us-gov-west-1"
 
 fuzzy_region() {
   AWS_REGION=$(peco <<<"${aws_regions}")
+}
+
+header() {
+  tput setaf 5
+  tput bold
+  echo $@
+  tput sgr0
+}
+
+body() {
+  echo $@
 }
