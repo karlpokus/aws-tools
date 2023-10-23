@@ -14,12 +14,12 @@ source ./utils.sh
 fuzzy_profile
 test -z "${AWS_PROFILE}" && exit 0
 
-echo "* Profile"
-echo "  ${AWS_PROFILE}"
-echo "* Thing"
-echo "  ${THING_NAME}"
-echo "* Shadow"
-echo "  ${SHADOW_NAME}"
+header Profile
+body $AWS_PROFILE
+header Thing
+body $THING_NAME
+header Shadow
+body $SHADOW_NAME
 
 if test "${SHADOW_NAME}" = "classic"; then 
   aws iot-data get-thing-shadow \
