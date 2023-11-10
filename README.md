@@ -39,6 +39,7 @@ Each script will create a local cache (role names, log_groups etc) for future lo
 - [x] ec2
 - [ ] role: lambda resource-based policy
 - [ ] logs: ignore log_group prefix for lookup
+- [ ] dump header to stderr so we can pipe to jq
 
 # license
 MIT
