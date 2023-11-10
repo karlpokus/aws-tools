@@ -37,6 +37,19 @@ logs_cache() {
   fi
 }
 
+table_cache() {
+  local cache_path=$1
+  local cache_dir=$(dirname "${cache_path}")
+  mkdir -p "${cache_dir}"
+  if test ! -f "${cache_path}"; then
+    echo "cache: miss"
+    aws --profile "${AWS_PROFILE}" dynamodb list-tables \
+      | jq -r '.TableNames[]' > "${cache_path}"
+  else
+    echo "cache: hit"
+  fi
+}
+
 fuzzy_profile() {
   AWS_PROFILE=$(grep '\[profile' ~/.aws/config \
     | tr -d [] \

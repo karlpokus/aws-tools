@@ -21,6 +21,10 @@ $ ./thing.sh <thing>
 $ ./ec2.sh
 # pull iot core thing shadow
 $ ./shadow.sh <thing> <shadow_name | leave empty for classic>
+# ddb operations (composite key not supported)
+$ ./ddb.sh scan
+$ ./ddb.sh get <key> <type> <value>
+$ ./ddb.sh delete <key> <type> <value>
 ````
 
 # cache
