@@ -25,6 +25,8 @@ $ ./shadow.sh <thing> <shadow_name | leave empty for classic>
 $ ./ddb.sh scan
 $ ./ddb.sh get <key> <type> <value>
 $ ./ddb.sh delete <key> <type> <value>
+# pull lambda config
+$ ./lambda-config.sh
 ````
 
 # cache
