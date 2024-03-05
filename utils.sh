@@ -30,7 +30,7 @@ logs_cache() {
   if test ! -f "${cache_path}"; then
     echo "cache: miss"
     aws --profile "${AWS_PROFILE}" logs describe-log-groups \
-      --log-group-name-prefix /aws/lambda --max-items 500 \
+      --log-group-name-prefix /aws/lambda --max-items 1000 \
       | jq -r '.logGroups[].logGroupName' > "${cache_path}"
   else
     echo "cache: hit"
